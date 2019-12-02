@@ -1,0 +1,23 @@
+(contains? {:a 1} :a)    ;=> true
+(contains? {:a nil} :a)  ;=> true
+(contains? {:a 1} :b)    ;=> false
+
+;; It's likely to surprise you for other sequences because it's
+;; about *indices* or *keys*, not *contents*:
+
+(contains? [:a :b :c] :b)  ;=> false
+(contains? [:a :b :c] 2)   ;=> true
+(contains? "f" 0)          ;=> true
+(contains? "f" 1)          ;=> false
+
+;; Although lists are sequences, they are not keyed sequences.
+;; `contains?` should not be used for lists.
+
+(contains? '(1 2 3) 1)
+;; IllegalArgumentException (Clojure >=1.5)
+
+;; It also works on native arrays, HashMaps or HashSets:
+(import '[java.util HashMap HashSet])
+(contains? (doto (HashSet.) (.add 1)) 1) ;=> true
+(contains? (doto (HashMap.) (.put "a" 1)) "a") ;=> true
+(contains? (int-array [1 2 3]) 0) ;=> true
